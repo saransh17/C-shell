@@ -15,11 +15,6 @@
 
 const int l_siz=1e4;
 const int r_siz=1e6;
-/*char **stplit_commands(char* command,char *)
-{
-	char del[]=";";
-}*/
-
 
 int main()
 {
@@ -92,15 +87,59 @@ int main()
             args[arg_p]=(char*)malloc(sizeof(char)*10000);
             strcpy(args[arg_p],tokens);
 
-            tokens= strtok(NULL," \n\t\r");
+            tokens= strtok(NULL," \n\t\r\a");
             arg_p++;
             //printf("jtsdfkjhvn");
        	}
        	int ret;
-       	if(args[0]==0)
-       	{
-       		continue;
-       	}
+            int checkk=0;
+            char str1[1]="<";
+            char str2[1]=">";
+            char str3[2]=">>";
+            int l=0,r=0,sin,sout;
+            sin=dup(0);sout=dup(1);
+            for(int i=0;i<arg_p;i++)
+            {
+                  if(strncmp(args[i],str1,1)==0)
+                        l=1;
+                  if(strncmp(args[i],str2,1)==0)
+                        r=1; 
+                  if(strncmp(args[i],str3,2)==0)
+                        r=2;     
+            }
+            if(l+r>0)
+                  ret=call_red(args,arg_p,l,r);
+            if(r>0)
+            {
+                  args[arg_p-1]=NULL;arg_p--;
+                  args[arg_p-1]=NULL;arg_p--;
+            }
+            if(l>0)
+            {
+                  char *args1[1000];
+                  int i=0;
+                  while(strcmp(args[i],str1)!=0)
+                  {
+                        args1[i]=args[i];
+                        i++;
+                  }
+                  for(i=i;i<arg_p;i++)
+                  {
+                        args1[i]=args[i+2];
+                  }
+                  arg_p-=2;
+                  for(i=0;i<arg_p;i++)
+                  {
+                        args[i]=args1[i];
+                  }
+                  args[arg_p]=NULL;
+            }
+      
+            if(strcmp(args[0],"quit")==0)
+            {
+                  printf("Exiting shell\n----------------------------------\nRoll no:2018114016\n----------------------------------\n");
+                  exit(0);
+            }
        	else if(strcmp(args[0],"cd")==0)
        	{
        		call_cd(args[1],path);
@@ -109,6 +148,20 @@ int main()
        	{
        		ret=call_echo(args);
        	}
+            else if(strcmp(args[0],"setenv")==0)
+            {
+                  int it_args=0;
+                  while(args[it_args]!=NULL)
+                        it_args++;
+                  ret=call_setenv(args,it_args);
+            }
+            else if(strcmp(args[0],"unsetenv")==0)
+            {
+                  int it_args=0;
+                  while(args[it_args]!=NULL)
+                        it_args++;
+                  ret=call_unsetenv(args,it_args);
+            }
        	else if(strcmp(args[0],"pwd")==0)
        	{
        		if(arg_p==1)
@@ -159,7 +212,15 @@ int main()
             {
                   int xi=call_ground(args,arg_p);
             }
+            if(args[0]==0)
+            {
+                  continue;
+            }
+            dup2(sin,0);
+            dup2(sout,1);
+
       }
+      
 	}
 	return 0;
 }
