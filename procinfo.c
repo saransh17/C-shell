@@ -15,7 +15,7 @@
 
 int call_pinfo(char **args)
 {
-    printf("reached\n");
+    //printf("reached\n");
     int pid;
     char *str2 = malloc(PATH_MAX);
     
@@ -38,9 +38,10 @@ int call_pinfo(char **args)
     char str3[1000];
     strcpy(str3,"/exe");
     strcpy(str4,"/stat");
-    
-    strcat(str2,str4);
-    strcat(str1,str2);
+    char str2d[1000];
+    strcpy(str2d, str2);
+    strcat(str2d, str4);
+    strcat(str1,str2d);
     
     FILE *file=fopen(str1,"r");
     if(file==NULL)
@@ -68,6 +69,7 @@ int call_pinfo(char **args)
     fclose(file);
     strcat(str2,str3);
     strcat(str1d,str2);
+    printf("%s\n", str1d);
     char *buf;
     buf=(char*)malloc(PATH_MAX);
     int check=readlink(str1d,buf,PATH_MAX);

@@ -50,5 +50,4 @@ int call_cd(char *location,char *my_path)
 		chdir(location);
 	}
 	return 1;
-
 }

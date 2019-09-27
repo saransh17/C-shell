@@ -8,3 +8,6 @@ int call_ground(char **,int);
 int call_fg(char **,int);
 int call_bg(char **,int);
 int call_pinfo(char **);
+int call_setenv(char **,int);
+int call_unsetenv(char **,int);
+int call_red(char **,int,int,int);
